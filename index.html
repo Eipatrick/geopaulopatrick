@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Geo Paulo Patrick</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        
+        <style>
+            /* Estilos para o cabeçalho */
+            header {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                color: white;
+                background-image: url('Terra.jpg');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-color: rgba(0, 0, 0, 0.5);
+                background-blend-mode: overlay;
+                width: 100hv;
+                height: 90vh;
+            }
+            
+            header h1, header p {
+                margin: 10px 0;
+                position: relative;
+                z-index: 1;
+            }
+    
+            #buttons {
+                position: relative;
+                z-index: 1;
+                margin-top: 20px;
+            }
+    
+            #buttons img {
+                filter: brightness(1) invert(0);
+            }
+
+            /* Media Queries para mobile */
+        @media (max-width: 768px) {
+            header {
+                background-attachment: scroll; /* Remove parallax em mobile */
+                background-position: top center; /* Ajusta posição da imagem */
+            }
+            
+            header h1 {
+                font-size: 2rem;
+                margin-bottom: 0.8rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            #buttons {
+                gap: 15px;
+                margin-top: 20px;
+            }
+            
+            #buttons img {
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+        /* Ajustes para telas muito pequenas */
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            header p {
+                font-size: 0.9rem;
+            }
+            
+            #buttons {
+                gap: 10px;
+            }
+            
+            #buttons img {
+                width: 30px;
+                height: 30px;
+            }
+        }
+        .carousel-section {
+    margin-top: 10px;
+    border-bottom: 10px;
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border: 2px solid #8c6b54; 
+    border-radius: 16px; /* ajuste o valor conforme o nível de arredondamento desejado */
+}
+
+
+.carousel {
+    position: relative;
+    max-width: 1176px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 40px;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item { 
+    flex: 0 0 auto;
+    width: 250px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    border: 2px solid #8c6b54; /* tom esverdeado */
+}
+
+
+.carousel-item a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carousel-item img {
+    transition: transform 0.3s ease;
+    border-bottom: 1px solid #ddd;    
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.carousel-item p {
+    padding: 10px;
+    font-weight: 500;
+}
+
+.carousel-item:hover img {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-item:hover a {
+    color: #0077cc;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    z-index: 1;
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+@media (max-width: 768px) {
+    .carousel-track {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .carousel-item {
+        scroll-snap-align: start;
+    }
+
+    .carousel-btn {
+        display: none;
+    }
+}
+.profile-image img {
+  max-width: 150px;
+  border-radius: 50%;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  border: 2px solid #8c6b54; /* Define a largura, estilo e cor da borda */
+}
+    </style>
+</head>
+<body>
+    <!-- Selo "IA Friendly" -->
+    <div id="ia-friendly">Feito com IA ♥</div>
+
+    <!-- Cabeçalho com imagem de fundo -->
+    <header>
+        <h1>Geo Paulo Patrick</h1>
+        <p>Bem-vindo ao meu portfólio de geoprocessamento e sensoriamento remoto.</p>
+        <p>© Paulo Patrick Rodrigues da Silva</p>
+
+<!-- Botões OpenStreetMap, LinkedIn, GitHub e Freelancer -->
+<div id="buttons">
+    <div class="osm-link">
+        <a href="https://www.openstreetmap.org/user/eipatrick" target="_blank" rel="noopener noreferrer">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Openstreetmap_logo.svg" alt="OpenStreetMap">
+        </a>
+    </div>
+
+    <div class="linkedin-link">
+        <a href="https://www.linkedin.com/in/paulo-patrick-rodrigues-da-silva-5a3791100/" target="_blank" rel="noopener noreferrer">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn">
+        </a>
+    </div>
+
+    <div class="github-link">
+        <a href="https://github.com/Eipatrick/Portfolio_cartografia" target="_blank" rel="noopener noreferrer">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub">
+        </a>
+    </div>
+
+    <div class="freelancer-link">
+        <a href="https://www.br.freelancer.com/u/eipatrick" target="_blank" rel="noopener noreferrer">
+            <img src="pngwing.com.png" alt="Freelancer.com">
+        </a>
+    </div>
+</div>
+    </header>
+
+    <!-- Menu de Navegação -->
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="projetos.html">Projetos</a>
+        <a href="artigos.html">Artigos</a>
+        <a href="contato.php">Contato</a>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="container">
+        <!-- Seção Sobre -->
+        <section id="sobre">
+            <div class="sobre-container">
+                <img src="Foto_Perfil.jpg" alt="Foto de Paulo Patrick">
+                <div class="sobre-texto">
+                    <h2>Sobre Mim</h2>
+                    <p><strong>Geógrafo em formação e Bacharel em Engenharia Civil</strong>, com interesse em expansão nas áreas de geotecnologias e sustentabilidade ambiental. Possuo conhecimento em geoprocessamento com uso intermediário a avançado do QGIS para elaboração de mapas temáticos, análises espaciais e manipulação de dados georreferenciados. Tenho conhecimentos básicos em Python e SQL para automação de processos e tratamento de bancos de dados, além de experiência em sensoriamento remoto, com foco em análise de índices espectrais (NDVI, NDWI) para monitoramento ambiental, além de mapeamento comunitário.<p>
+
+                    </p>
+                    Atualmente, desenvolvo projetos independentes voltados à análise socioambiental integrada, combinando técnicas de GIS, dados abertos e métricas de sustentabilidade. Busco aplicar metodologias aprendidas em cursos especializados e na graduação para solucionar desafios práticos em gestão territorial, diagnósticos ambientais e otimização de processos geoespaciais. Comprometido com a <strong>interdisciplinaridade</strong> entre engenharia, geociências e tecnologia, visando contribuir para soluções inovadoras em planejamento e gestão de recursos naturais.</p>
+                </div>
+                <div class="profile-image">
+                    <!-- Se tiver uma imagem ou logo do Freelancer, insira aqui -->
+                    <img src="marca_paulopatrick.png" alt="Freelancer">
+                  </div>
+            </div>
+        </section>
+
+<!-- Carrossel de Mapas -->
+<section class="carousel-section">
+    <h2 class="section-title">Vitrine dos Projetos</h2>
+    <div class="carousel">
+        <div class="carousel-track">
+
+            <!-- Item 1 - Imagem CBERS -->
+            <div class="carousel-item">
+                <a href="Atlas_Cartográfico/Atlas_cartografico.html">
+                    <img src="Atlas_Cartográfico/Lagoa_da_Pampulha_CBERS.png" alt="Imagem CBERS da Lagoa da Pampulha">
+                    <p class="carousel-caption">Lagoa da Pampulha - Satélite CBERS</p>
+                </a>
+            </div>
+
+            <!-- Item 2 - NDVI -->
+            <div class="carousel-item">
+                <a href="Atlas_Cartográfico/Atlas_cartografico.html">
+                    <img src="Atlas_Cartográfico/Mapa_índice_NDVI.png" alt="Mapa NDVI">
+                    <p class="carousel-caption">NDVI - Cobertura Vegetal</p>
+                </a>
+            </div>
+
+            <!-- Item 3 - LST -->
+            <div class="carousel-item">
+                <a href="Atlas_Cartográfico/Atlas_cartografico.html">
+                    <img src="Atlas_Cartográfico/Mapa_temperatura_03.03.25.png" alt="Mapa de Temperatura LST">
+                    <p class="carousel-caption">Temperatura Superficial (LST)</p>
+                </a>
+            </div>
+
+            <!-- Item 4 - OMI -->
+            <div class="carousel-item">
+                <a href="Atlas_Cartográfico/Atlas_cartografico.html">
+                    <img src="Atlas_Cartográfico/Mapa_materia_organica.png" alt="Mapa de Matéria Orgânica (OMI)">
+                    <p class="carousel-caption">OMI - Poluição por Matéria Orgânica</p>
+                </a>
+            </div>
+
+            <!-- Item 5 - NDWI -->
+            <div class="carousel-item">
+                <a href="atlas_pampulha.html#ndwi">
+                    <img src="Atlas_Cartográfico/Mapa_índice_NDWI.png" alt="Mapa NDWI">
+                    <p class="carousel-caption">NDWI - Recursos Hídricos</p>
+                </a>
+            </div>
+
+            <!-- Item 5 - Desafio Imobiliário -->
+            <div class="carousel-item">
+                <a href="Desafio_Imobiliário_QGIS/Desafio_Imobiliario_QGIS.html">
+                    <img src="Desafio_Imobiliário_QGIS/Desafio_Imobiliario_Descomplica_QGIS.png" alt="Mapa NDWI">
+                    <p class="carousel-caption">Desafio Imobiliário</p>
+                </a>
+            </div>            
+
+        </div>
+
+        <!-- Botões de navegação -->
+        <button class="carousel-btn prev" aria-label="Imagem anterior">&#10094;</button>
+        <button class="carousel-btn next" aria-label="Próxima imagem">&#10095;</button>
+    </div>
+</section>
+
+        
+
+        <div class="container">
+            <h2>Mural de Habilidades</h2>
+            <p>Esta é uma autoavaliação subjetiva, sujeita a revisão conforme avanço nos estudos e projetos.</p>
+            <div class="skill">
+                <div class="skill-name">SIG | QGIS</div>
+                <div class="progress-bar"><div class="progress" data-progress="50">50%</div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">Banco de Dados | SQL</div>
+                <div class="progress-bar"><div class="progress" data-progress="30">30%</div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">Python</div>
+                <div class="progress-bar"><div class="progress" data-progress="10">10%</div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">Sensoriamento Remoto</div>
+                <div class="progress-bar"><div class="progress" data-progress="30">30%</div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">Cartografia</div>
+                <div class="progress-bar"><div class="progress" data-progress="40">40%</div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">Geoestatística</div>
+                <div class="progress-bar"><div class="progress" data-progress="15">15%</div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">Power BI</div>
+                <div class="progress-bar"><div class="progress" data-progress="5">5%</div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">Inteligência Artifical</div>
+                <div class="progress-bar"><div class="progress" data-progress="60">60%</div></div>
+            </div>
+        </div>
+
+        <section class="banner">
+            <div class="banner-content">
+                <h1 class="animated-title">Minhas Contribuições no OpenStreetMap</h1>
+                <p class="animated-subtitle">Explore minhas edições e descubra como estou ajudando a mapear o mundo!</p>
+            </div>
+        </section>
+
+        <div class="map-container">
+            <!-- Mapa OpenStreetMap -->
+            <div id="map"></div>
+        
+            <!-- Menu de edições -->
+            <div class="edits-menu">
+                <h3>Últimas Edições</h3>
+                <ul id="edits-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer">
+        <p>&copy; Paulo Patrick Rodrigues da Silva, 2025.</p>
+        <p>
+            Este portfólio é de código aberto sob a 
+            <a href="license.md" target="_blank" class="license-link">licença GNU GPL v3</a>. 
+            Você pode usar e compartilhar o conteúdo para fins não comerciais, desde que atribua os créditos adequadamente.
+        </p>
+        <div class="ai-credit">
+            <p>Desenvolvido com a colaboração das IA's DeepSeek e ChatGPT.</p>
+        </div>
+    </footer>
+
+    <!-- Biblioteca do Leaflet -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Vinculação ao script.js -->
+    <script src="script.js"></script>
+    
+</body>
+</html>
